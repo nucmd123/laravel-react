@@ -51,8 +51,6 @@ export const GoogleButtonLogin = () => {
                 text: 'continue_with',
             })
             // window.google.accounts.id.prompt()
-        } else {
-            navigate(0)
         }
     }, [navigate, googleButtonLoginWidth])
 
