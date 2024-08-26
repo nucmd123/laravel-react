@@ -1,20 +1,15 @@
-import { useEffect, useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { GoogleButtonLogin } from '../components/GoogleButtonLogin'
-import { loginService, TLoginPayload } from '../services/authService'
+import { TLoginPayload } from '../services/authService'
+import { emailValidate } from '../utils/validateEmail'
 
 export const LoginPage = () => {
-    // use get width for google login button
-    const inputRef = useRef<HTMLDivElement>(null)
-    const [btnWidth, setBtnWidth] = useState<number>()
-    useEffect(() => {
-        setBtnWidth(inputRef.current?.offsetWidth)
-    }, [btnWidth])
-
     // handle login form
     const { register, handleSubmit, formState } = useForm<TLoginPayload>()
     const handleLogin: SubmitHandler<TLoginPayload> = (payload) => {
-        loginService(payload)
+        console.log(payload)
+        // emailValidate(payload.email)
+        // loginService(payload)
     }
 
     return (
@@ -22,7 +17,7 @@ export const LoginPage = () => {
             <div className='w-full max-w-md rounded-xl bg-white p-8 shadow'>
                 <h1 className='text-center text-lg font-bold'>Đăng nhập</h1>
                 <form onSubmit={handleSubmit(handleLogin)}>
-                    <div className='mb-4' ref={inputRef}>
+                    <div className='mb-4'>
                         <label
                             htmlFor='email'
                             className='mb-1 block text-sm font-semibold text-gray-800'
@@ -36,11 +31,26 @@ export const LoginPage = () => {
                             className={`w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring ${formState.errors.email ? 'border-red-500 ring-red-300' : ''}`}
                             {...register('email', {
                                 required: 'Bạn chưa điền thông tin này',
+                                validate: {
+                                    isEmail: (data) => {
+                                        return (
+                                            emailValidate(data) ||
+                                            `Email không đúng định dạng`
+                                        )
+                                    },
+                                },
                             })}
                         />
-                        {formState.errors.email && (
+                        {formState.errors.email?.type === 'required' && (
                             <div className='text-xs text-red-500'>
                                 {formState.errors.email.message}
+                            </div>
+                        )}
+                        {(formState.errors.email?.type === 'pattern' ||
+                            formState.errors.email?.type === 'isEmail') && (
+                            <div className='text-xs text-red-500'>
+                                {formState.errors.email.message}
+                                {/* `Tên người dùng dài từ 6 - 30 ký tự, có thể chứa chữ cái (a-z), số (0-9) và dấu chấm (.), không chứa ký hiệu như &, =, _, ', -, +, ,, <, >, hoặc nhiều dấu chấm liên tiếp. Có thể bắt đầu hoặc kết thúc bằng dấu chấm.` */}
                             </div>
                         )}
                     </div>
@@ -60,7 +70,7 @@ export const LoginPage = () => {
                                 required: 'Bạn chưa điền thông tin này',
                             })}
                         />
-                        {formState.errors.password && (
+                        {formState.errors.password?.type === 'required' && (
                             <div className='text-xs text-red-500'>
                                 {formState.errors.password.message}
                             </div>
@@ -78,7 +88,7 @@ export const LoginPage = () => {
                         Quên mật khẩu
                     </p>
                     <div className='mb-4'>
-                        <GoogleButtonLogin width={btnWidth} />
+                        <GoogleButtonLogin />
                     </div>
                 </form>
             </div>
