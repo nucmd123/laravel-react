@@ -1,15 +1,21 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { GoogleButtonLogin } from '../components/GoogleButtonLogin'
-import { TLoginPayload } from '../services/authService'
+import { loginService, TLoginPayload } from '../services/authService'
 import { emailValidate } from '../utils/validateEmail'
+import { useNavigate } from 'react-router-dom'
+import useToast from '../contexts/Toast/useToast'
 
 export const LoginPage = () => {
+    const navigate = useNavigate()
+    const { setMessage } = useToast()
     // handle login form
     const { register, handleSubmit, formState } = useForm<TLoginPayload>()
-    const handleLogin: SubmitHandler<TLoginPayload> = (payload) => {
-        console.log(payload)
-        // emailValidate(payload.email)
-        // loginService(payload)
+    const handleLogin: SubmitHandler<TLoginPayload> = async (payload) => {
+        const logged = await loginService(payload)
+        if (logged) {
+            setMessage('Đăng nhập thành công')
+            navigate('/dashboard')
+        }
     }
 
     return (

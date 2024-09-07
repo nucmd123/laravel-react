@@ -2,10 +2,11 @@ import axios from 'axios'
 import headers from './headers'
 
 const axiosInstance = axios.create({
-    baseURL: 'http://127.0.0.1:8000/api/v1/',
+    baseURL: 'http://127.0.0.1:8000/api/v1',
     headers: {
         'Content-Type': headers['Content-Type']['application/json'],
     },
+    withCredentials: true,
 })
 axiosInstance.interceptors.request.use(
     (config) => {
@@ -17,9 +18,13 @@ axiosInstance.interceptors.request.use(
 )
 axiosInstance.interceptors.response.use(
     (response) => {
-        return response
+        return response.data ?? response
     },
     (error) => {
+        const { response } = error
+        if (response.status === 401) {
+            // call refresh token
+        }
         return Promise.reject(error)
     },
 )

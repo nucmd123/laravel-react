@@ -5,6 +5,9 @@ import './index.css'
 import { UserPage } from './pages/UserPage'
 import { LoginPage } from './pages/LoginPage'
 import { Dashboard } from './pages/Dashboard'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import ToastProvider from './contexts/Toast/toastProvider'
 
 const router = createBrowserRouter([
     {
@@ -16,13 +19,16 @@ const router = createBrowserRouter([
         element: <UserPage />,
     },
     {
-        path: '/admin',
+        path: '/dashboard',
         element: <Dashboard />,
     },
 ])
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <RouterProvider router={router} />
+        <ToastProvider>
+            <RouterProvider router={router} />
+            <ToastContainer />
+        </ToastProvider>
     </StrictMode>,
 )

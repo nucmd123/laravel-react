@@ -1,5 +1,16 @@
-import React from "react";
+import { useEffect } from 'react'
+import useToast from '../contexts/Toast/useToast'
+import { toast } from 'react-toastify'
 
 export const Dashboard = () => {
-    return <div>Dashboard</div>;
-};
+    const { message, setMessage, messageType } = useToast()
+
+    useEffect(() => {
+        if (message) {
+            toast[messageType](message)
+            setMessage('')
+        }
+    }, [message, setMessage, messageType])
+
+    return <div>Dashboard</div>
+}
