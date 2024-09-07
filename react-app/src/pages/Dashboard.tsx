@@ -1,16 +1,12 @@
 import { useEffect } from 'react'
 import useToast from '../contexts/Toast/useToast'
-import { toast } from 'react-toastify'
+import showNotification from '../helpers/showNotification'
 
 export const Dashboard = () => {
-    const { message, setMessage, messageType } = useToast()
-
+    const { message, type, setMessage } = useToast()
     useEffect(() => {
-        if (message) {
-            toast[messageType](message)
-            setMessage('')
-        }
-    }, [message, setMessage, messageType])
+        if (message && type) showNotification(message, type, setMessage)
+    }, [message, type, setMessage])
 
     return <div>Dashboard</div>
 }

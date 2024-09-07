@@ -12,8 +12,9 @@ export const LoginPage = () => {
     const { register, handleSubmit, formState } = useForm<TLoginPayload>()
     const handleLogin: SubmitHandler<TLoginPayload> = async (payload) => {
         const logged = await loginService(payload)
+
         if (logged) {
-            setMessage('Đăng nhập thành công')
+            setMessage('Đăng nhập thành công', 'success')
             navigate('/dashboard')
         }
     }

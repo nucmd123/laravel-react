@@ -1,7 +1,7 @@
 import { useContext } from 'react'
-import ToastContext, { TToastContext } from './toastContext'
+import ToastContext, { ToastContextType } from './toastContext'
 
-const useToast = (): TToastContext => {
+const useToast = (): ToastContextType => {
     const context = useContext(ToastContext)
     if (!context) throw new Error(`Toast context is not defind`)
     return context

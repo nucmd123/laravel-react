@@ -1,12 +1,11 @@
 import { createContext } from 'react'
 
-export type TToastMessageType = 'success' | 'error' | 'warning'
-export type TToastContext = {
+export type ToastType = 'success' | 'error' | 'warning' | null
+export type ToastContextType = {
     message: string
-    setMessage: (message: string) => void
-    messageType: TToastMessageType
-    setmessageType: (type: TToastMessageType) => void
+    type: ToastType
+    setMessage: (message: string, type: ToastType) => void
 }
 
-const ToastContext = createContext<TToastContext | undefined>(undefined)
+const ToastContext = createContext<ToastContextType | undefined>(undefined)
 export default ToastContext
