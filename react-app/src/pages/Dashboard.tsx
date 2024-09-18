@@ -1,12 +1,19 @@
 import { useEffect } from 'react'
-import useToast from '../contexts/Toast/useToast'
-import showNotification from '../helpers/showNotification'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../redux/store'
+import { clearToast } from '../redux/slice/toastSlice'
+import { toast } from 'react-toastify'
 
 export const Dashboard = () => {
-    const { message, type, setMessage } = useToast()
+    const dispatch = useDispatch()
+    const toastState = useSelector((state: RootState) => state.toast)
+
     useEffect(() => {
-        if (message && type) showNotification(message, type, setMessage)
-    }, [message, type, setMessage])
+        if (toastState.type && toastState.message) {
+            toast[toastState.type](toastState.message)
+            dispatch(clearToast())
+        }
+    }, [toastState.type, toastState.message, dispatch])
 
     return <div>Dashboard</div>
 }

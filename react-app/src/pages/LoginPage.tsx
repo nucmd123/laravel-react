@@ -3,21 +3,27 @@ import { GoogleButtonLogin } from '../components/GoogleButtonLogin'
 import { loginService, TLoginPayload } from '../services/authService'
 import { emailValidate } from '../utils/validateEmail'
 import { useNavigate } from 'react-router-dom'
-import useToast from '../contexts/Toast/useToast'
+import { setToast } from '../redux/slice/toastSlice'
+import { useDispatch } from 'react-redux'
 
 export const LoginPage = () => {
     const navigate = useNavigate()
-    const { setMessage } = useToast()
+
     // handle login form
     const { register, handleSubmit, formState } = useForm<TLoginPayload>()
-    const handleLogin: SubmitHandler<TLoginPayload> = async (payload) => {
+    const handleLogin: SubmitHandler<TLoginPayload> = async payload => {
         const logged = await loginService(payload)
 
         if (logged) {
-            setMessage('Đăng nhập thành công', 'success')
+            // setMessage('Đăng nhập thành công', 'success')
+            dispatch(
+                setToast({ message: 'Đăng nhập thành công', type: 'success' }),
+            )
             navigate('/dashboard')
         }
     }
+
+    const dispatch = useDispatch()
 
     return (
         <div className='flex min-h-screen items-center justify-center bg-gray-100'>
@@ -39,7 +45,7 @@ export const LoginPage = () => {
                             {...register('email', {
                                 required: 'Bạn chưa điền thông tin này',
                                 validate: {
-                                    isEmail: (data) => {
+                                    isEmail: data => {
                                         return (
                                             emailValidate(data) ||
                                             `Email không đúng định dạng`
