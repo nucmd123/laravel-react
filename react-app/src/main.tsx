@@ -1,13 +1,13 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { ToastContainer } from 'react-toastify'
+import { Provider as ReactReduxProvider } from 'react-redux'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './index.css'
-import { UserPage } from './pages/UserPage'
-import { LoginPage } from './pages/LoginPage'
+import { UserPage } from './pages/User'
+import { LoginPage } from './pages/Login'
 import { Dashboard } from './pages/Dashboard'
-import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { Provider as ReactReduxProvider } from 'react-redux'
 import { store } from './redux/store'
 
 const router = createBrowserRouter([
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
         element: <LoginPage />,
     },
     {
-        path: '/users',
+        path: '/user',
         element: <UserPage />,
     },
     {
