@@ -9,18 +9,18 @@ const axiosInstance = axios.create({
     withCredentials: true,
 })
 axiosInstance.interceptors.request.use(
-    (config) => {
+    config => {
         return config
     },
-    (error) => {
+    error => {
         return Promise.reject(error)
     },
 )
 axiosInstance.interceptors.response.use(
-    (response) => {
+    response => {
         return response.data ?? response
     },
-    (error) => {
+    error => {
         const { response } = error
         if (response.status === 401) {
             // call refresh token

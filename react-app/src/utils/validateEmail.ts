@@ -19,7 +19,7 @@ export const emailValidate = (email: string) => {
     const domainParts = emailDomain.split('.')
 
     if (
-        domainParts.some((part) => {
+        domainParts.some(part => {
             return part.length > 63
         })
     )
