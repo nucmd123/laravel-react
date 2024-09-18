@@ -27,6 +27,7 @@ export default tseslint.config(
             '@typescript-eslint/no-unused-vars': 1,
             '@typescript-eslint/no-explicit-any': 0,
             '@typescript-eslint/no-empty-object-type': 1,
+            'react-refresh/only-export-components': 0,
         },
     },
 )

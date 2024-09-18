@@ -1,5 +1,5 @@
+import env from '@/configs/envConfig'
 import { useEffect, useState } from 'react'
-import env from '../configs/envConfig'
 import { useNavigate } from 'react-router-dom'
 
 type TCredentialResponse = {

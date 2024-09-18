@@ -1,6 +1,4 @@
-import { AxiosError } from 'axios'
-import axiosInstance from '../configs/axiosConfig'
-import handleAxiosError from '../helpers/axiosHelpers'
+import axiosInstance from '@/configs/axiosConfig'
 
 // login
 export type TLoginPayload = {
@@ -8,13 +6,9 @@ export type TLoginPayload = {
     password: string
 }
 export const loginService = async (payload: TLoginPayload) => {
-    try {
-        const res = await axiosInstance.post('auth/login', payload)
+    const res = await axiosInstance.post('auth/login', payload)
 
-        return true
-    } catch (error) {
-        if (error instanceof AxiosError) handleAxiosError(error)
-    }
+    return res
 }
 
 // logout

@@ -1,7 +1,7 @@
+import { clearToast } from '@/redux/slice/toastSlice'
+import { RootState } from '@/redux/store'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../redux/store'
-import { clearToast } from '../redux/slice/toastSlice'
 import { toast } from 'react-toastify'
 
 export const Dashboard = () => {

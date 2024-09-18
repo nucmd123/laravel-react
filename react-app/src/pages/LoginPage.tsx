@@ -1,29 +1,44 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { GoogleButtonLogin } from '../components/GoogleButtonLogin'
-import { loginService, TLoginPayload } from '../services/authService'
-import { emailValidate } from '../utils/validateEmail'
 import { useNavigate } from 'react-router-dom'
-import { setToast } from '../redux/slice/toastSlice'
 import { useDispatch } from 'react-redux'
+import { loginService, TLoginPayload } from '@/services/authService'
+import { setToast } from '@/redux/slice/toastSlice'
+import { emailValidate } from '@/utils/validateEmail'
+import { GoogleButtonLogin } from '@/components/GoogleButtonLogin'
+import { Button } from '@/components/ui/button'
+import { ReloadIcon } from '@radix-ui/react-icons'
+import { useState } from 'react'
+import { AxiosError } from 'axios'
+import handleAxiosError from '@/helpers/axiosHelpers'
 
 export const LoginPage = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const [loginLoading, setLoginLoading] = useState<boolean>(false)
 
     // handle login form
     const { register, handleSubmit, formState } = useForm<TLoginPayload>()
     const handleLogin: SubmitHandler<TLoginPayload> = async payload => {
-        const logged = await loginService(payload)
+        setLoginLoading(true)
+        try {
+            const res = await loginService(payload)
 
-        if (logged) {
-            // setMessage('Đăng nhập thành công', 'success')
             dispatch(
-                setToast({ message: 'Đăng nhập thành công', type: 'success' }),
+                setToast({
+                    message: 'Đăng nhập thành công',
+                    type: 'success',
+                }),
             )
+
             navigate('/dashboard')
+        } catch (error) {
+            if (error instanceof AxiosError) handleAxiosError(error)
+        } finally {
+            setLoginLoading(false)
         }
     }
-
-    const dispatch = useDispatch()
+    //
 
     return (
         <div className='flex min-h-screen items-center justify-center bg-gray-100'>
@@ -90,12 +105,26 @@ export const LoginPage = () => {
                         )}
                     </div>
                     <div className='mb-4'>
-                        <button
+                        {/* <button
                             type='submit'
                             className='w-full rounded bg-blue-600 p-2 text-white hover:bg-blue-500'
                         >
                             Đăng nhập
-                        </button>
+                        </button> */}
+                        <Button
+                            type='submit'
+                            className='w-full bg-blue-600 text-base font-normal hover:bg-blue-500'
+                            variant='default'
+                            disabled={loginLoading}
+                        >
+                            {loginLoading ? (
+                                <ReloadIcon className='mr-2 h-4 w-4 animate-spin' />
+                            ) : (
+                                <></>
+                            )}
+
+                            {loginLoading ? 'Đang đăng nhập' : 'Đăng nhập'}
+                        </Button>
                     </div>
                     <p className='mb-4 select-none text-center text-blue-700 hover:cursor-pointer hover:underline'>
                         Quên mật khẩu
