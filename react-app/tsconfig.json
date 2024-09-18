@@ -3,9 +3,7 @@
         "baseUrl": ".",
         "paths": {
             "@/*": ["./src/*"]
-        },
-        /* Linting */
-        "noUnusedLocals": false
+        }
     },
     "files": [],
     "references": [
