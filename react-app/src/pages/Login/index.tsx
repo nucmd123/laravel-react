@@ -1,7 +1,7 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { loginService, TLoginPayload } from '@/services/authService'
+import { loginService, LoginPayloadType } from '@/services/authService'
 import { setToast } from '@/redux/slice/toastSlice'
 import { emailValidate } from '@/utils/validateEmail'
 import { GoogleButtonLogin } from '@/components/GoogleButtonLogin'
@@ -10,20 +10,22 @@ import { ReloadIcon } from '@radix-ui/react-icons'
 import { useState } from 'react'
 import { AxiosError } from 'axios'
 import handleAxiosError from '@/helpers/axiosHelpers'
+import { setAuthLogin } from '@/redux/slice/authSlice'
 
-export const LoginPage = () => {
+const LoginPage = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
     const [loginLoading, setLoginLoading] = useState<boolean>(false)
 
     // handle login form
-    const { register, handleSubmit, formState } = useForm<TLoginPayload>()
-    const handleLogin: SubmitHandler<TLoginPayload> = async payload => {
+    const { register, handleSubmit, formState } = useForm<LoginPayloadType>()
+    const handleLogin: SubmitHandler<LoginPayloadType> = async payload => {
         setLoginLoading(true)
         try {
-            const res = await loginService(payload)
+            const data = await loginService(payload)
 
+            dispatch(setAuthLogin({ user: data.user }))
             dispatch(
                 setToast({
                     message: 'Đăng nhập thành công',
@@ -137,3 +139,5 @@ export const LoginPage = () => {
         </div>
     )
 }
+
+export default LoginPage

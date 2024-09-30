@@ -1,8 +1,9 @@
 import { createBrowserRouter } from 'react-router-dom'
-import { LoginPage } from './pages/Login'
-import { UserPage } from './pages/User'
-import { Dashboard } from './pages/Dashboard'
+import LoginPage from './pages/Login'
+import UserPage from './pages/User'
+import Dashboard from './pages/Dashboard'
 import Layout from './components/Layout'
+import AuthMiddleware from './middleware/AuthMiddleware'
 
 const router = createBrowserRouter([
     {
@@ -11,7 +12,11 @@ const router = createBrowserRouter([
     },
     {
         path: '/',
-        element: <Layout />,
+        element: (
+            <AuthMiddleware>
+                <Layout />
+            </AuthMiddleware>
+        ),
         children: [
             {
                 path: 'dashboard',

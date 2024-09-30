@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,9 +18,10 @@ class AuthController extends Controller
         $this->tokenTTL = JWTAuth::factory()->getTTL() * 60;
     }
 
-    protected function respondWithToken($token)
+    protected function respondWithToken($token, $user)
     {
         return response()->json([
+            'user' => new UserResource($user),
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => $this->tokenTTL,
@@ -33,29 +35,22 @@ class AuthController extends Controller
             'password' => $req->input('password'),
         ];
 
-        if (! $token = auth('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Tài khoản hoặc mật khẩu chưa chính xác'], Response::HTTP_UNAUTHORIZED);
+        if (!$token = auth('api')->attempt($credentials)) {
+            return response()->json([
+                'error' => 'Tài khoản hoặc mật khẩu chưa chính xác'
+            ], Response::HTTP_UNAUTHORIZED);
         }
 
+        $user = auth('api')->user();
         $accessTokenCookie = Cookie::make('access_token', $token, $this->tokenTTL,);
 
-        return $this->respondWithToken($token)->withCookie($accessTokenCookie);
+        return $this->respondWithToken($token, $user)->withCookie($accessTokenCookie);
     }
 
-
-    public function create() {}
-
-
-    public function store(Request $request) {}
-
-
-    public function show(string $id) {}
-
-
-    public function edit(string $id) {}
-
-    public function update(Request $request, string $id) {}
-
-
-    public function destroy(string $id) {}
+    public function me()
+    {
+        return response()->json(
+            new UserResource(auth('api')->user())
+        );
+    }
 }

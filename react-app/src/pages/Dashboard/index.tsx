@@ -1,19 +1,11 @@
-import { clearToast } from '@/redux/slice/toastSlice'
 import { RootState } from '@/redux/store'
-import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { toast } from 'react-toastify'
+import React, { useEffect } from 'react'
+import { useSelector } from 'react-redux'
 
-export const Dashboard = () => {
-    const dispatch = useDispatch()
-    const toastState = useSelector((state: RootState) => state.toast)
-
-    useEffect(() => {
-        if (toastState.type && toastState.message) {
-            toast[toastState.type](toastState.message)
-            dispatch(clearToast())
-        }
-    }, [toastState.type, toastState.message, dispatch])
+const Dashboard = () => {
+    const { isLogged, user } = useSelector((state: RootState) => state.auth)
 
     return <div>Dashboard</div>
 }
+
+export default Dashboard
